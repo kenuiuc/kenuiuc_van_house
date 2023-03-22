@@ -6,11 +6,11 @@ server = app.server
 app.layout = html.Div([
     html.H1('Hi Ken'),
     html.Iframe(
-        srcDoc=chart.plot_density(),
+        srcDoc=plot_density(),
         style={'border-width': '0', 'width': '100%', 'height': '400px'}
     ),
     html.Iframe(
-        srcDoc=chart.plot_bar(),
+        srcDoc=plot_bar(),
         style={'border-width': '0', 'width': '100%', 'height': '400px'}
     )
 ])
@@ -26,7 +26,7 @@ def plot_bar():
     ).to_html()
 
 
-def plot_density():    
+def plot_density():
     return alt.Chart(data, title='Price by Area').transform_density(
         'current_land_value',
         groupby=['Geo Local Area'],
