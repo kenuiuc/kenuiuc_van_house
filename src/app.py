@@ -6,7 +6,7 @@ import altair as alt
 app = dash.Dash(__name__, external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css'])
 server = app.server
 
-data = pd.read_csv('data/van_house.csv')
+data = pd.read_csv('../data/van_house.csv')
 
 def plot_bar(xmax):
     chart = alt.Chart(
