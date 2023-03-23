@@ -49,12 +49,18 @@ def plot_density(xmax, geolist):
 
 app.layout = html.Div([
         html.H1('Vancouver Housing Price'),
-        dcc.Slider(id='xslider', min=0, max=5000000, value=2500000),
-        dcc.Checklist(
-            id='ychecklist',
-            options=['Downtown','Fairview','Kitsilano','Mount Pleasant','Renfrew-Collingwood'],
-            value=['Downtown']
-        ),
+        html.Div([
+            'Price Range',
+            dcc.Slider(id='xslider', min=0, max=5000000, value=2500000)
+        ]),
+        html.Div([
+            'Select Local Area',
+            dcc.Checklist(
+                id='ychecklist',
+                options=['Downtown','Fairview','Kitsilano','Mount Pleasant','Renfrew-Collingwood'],
+                value=['Downtown']
+            )
+        ]),
         html.Iframe(
             id='density',
             srcDoc=plot_density(xmax=2500000, geolist=['Downtown']),
