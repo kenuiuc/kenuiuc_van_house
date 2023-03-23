@@ -8,9 +8,12 @@ server = app.server
 
 data = pd.read_csv('../data/van_house.csv')
 
-def plot_bar(xmax):
+def plot_bar(xmax, geolist):
     chart = alt.Chart(
-        data[data['current_land_value'] < xmax]
+        data[
+            (data['current_land_value'] < xmax) &
+            (data['Geo Local Area'].isin(geolist))
+        ]
     ).mark_bar().encode(
         x=alt.X("current_land_value", title="Price"),
         y=alt.Y("zoning_classification", title="Zoning Type"),
@@ -22,10 +25,12 @@ def plot_bar(xmax):
     return chart.to_html()
 
 
-def plot_density(xmax):
+def plot_density(xmax, geolist):
     density = alt.Chart(
-        data[data['current_land_value'] < xmax],
-        title='Price by Area'
+        data[
+            (data['current_land_value'] < xmax) &
+            (data['Geo Local Area'].isin(geolist))
+        ]
     ).transform_density(
         'current_land_value',
         groupby=['Geo Local Area'],
@@ -36,6 +41,8 @@ def plot_density(xmax):
         x=alt.X('current_land_value',title='Price'),
         y='density:Q',
         color='Geo Local Area'
+    ).properties(
+        title="Price by Location"
     )
     return density.to_html()
 
@@ -43,14 +50,19 @@ def plot_density(xmax):
 app.layout = html.Div([
         html.H1('Vancouver Housing Price'),
         dcc.Slider(id='xslider', min=0, max=5000000, value=2500000),
+        dcc.Checklist(
+            id='ychecklist',
+            options=['Downtown','Fairview','Kitsilano','Mount Pleasant','Renfrew-Collingwood'],
+            value=['Downtown']
+        ),
         html.Iframe(
             id='density',
-            srcDoc=plot_density(xmax=2500000),
+            srcDoc=plot_density(xmax=2500000, geolist=['Downtown']),
             style={'border-width': '0', 'width': '100%', 'height': '400px'}
         ),
         html.Iframe(
             id='bar',
-            srcDoc=plot_bar(xmax=2500000),
+            srcDoc=plot_bar(xmax=2500000, geolist=['Downtown']),
             style={'border-width': '0', 'width': '100%', 'height': '400px'}
         )
 ])
@@ -58,11 +70,12 @@ app.layout = html.Div([
 @app.callback(
     Output('bar', 'srcDoc'),
     Output('density', 'srcDoc'),
-    Input('xslider', 'value')
+    Input('xslider', 'value'),
+    Input('ychecklist', 'value')
 )
 
-def update_output(xmax):
-    return plot_bar(xmax), plot_density(xmax)
+def update_output(xmax, geolist):
+    return plot_bar(xmax, geolist), plot_density(xmax, geolist)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
