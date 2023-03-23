@@ -3,7 +3,7 @@ from dash import dash, dcc, html, Input, Output
 import dash_bootstrap_components as dbc
 import altair as alt
 
-app = dash.Dash(__name__, external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css'])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 data = pd.read_csv('../data/van_house.csv')
