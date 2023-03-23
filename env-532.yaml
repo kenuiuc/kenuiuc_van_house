@@ -1,0 +1,14 @@
+name: '532'
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - dash-bootstrap-components
+  - dash
+  - ipykernel
+  - ipython>=7.15
+  - vega_datasets
+  - altair_saver
+  - selenium<4.3.0
+  - pandas<1.5
+  - pip
